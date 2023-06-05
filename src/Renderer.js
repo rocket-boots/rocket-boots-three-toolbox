@@ -10,7 +10,7 @@ class Renderer extends WebGLRenderer {
 		if (options.height && options.width) {
 			this.aspect = options.width / options.height;
 		}
-		
+
 		this.pixelated = Boolean(options.pixelated);
 		this.setPixelRatio(window.devicePixelRatio);
 		// this.setSize(this.width, this.height);
@@ -21,6 +21,7 @@ class Renderer extends WebGLRenderer {
 		this.fixSize();
 	}
 
+	/** Sets the size based on the window and mutates the camera provided */
 	fixSize(camera) {
 		const w = this.width || window.innerWidth;
 		const h = this.height || window.innerHeight;

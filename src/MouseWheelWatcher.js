@@ -23,7 +23,10 @@ class MouseWheelWatcher {
 	}
 
 	get percent() { return this.getPercent(); }
-	set percent(n) { throw new Error('cannot set percent'); }
+
+	set percent(n) {
+		throw new Error('cannot set percent');
+	}
 
 	getPercent() {
 		const d = (this.y > 0) ? this.max : this.min * -1;

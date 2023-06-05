@@ -1,5 +1,5 @@
 // Based on https://www.youtube.com/watch?v=UuNPHOJ_V5o
-import { Quaternion, Vector3 } from 'three';
+import { /* Quaternion, */ Vector3 } from 'three';
 
 class ThirdPersonCamera {
 	constructor({ camera, target } = {}) {
@@ -7,6 +7,7 @@ class ThirdPersonCamera {
 		this.target = target;
 		this.currentPosition = new Vector3();
 		this.currentLookAt = new Vector3();
+		this.lookAtOffset = new Vector3(0, 0, 200);
 	}
 
 	calculateTargetVec3(vec3) {
@@ -17,14 +18,15 @@ class ThirdPersonCamera {
 
 		// Method using rotations - https://stackoverflow.com/a/10747728/1766230
 		const axis = new Vector3(0, 1, 0);
-		vec3.applyAxisAngle(axis, this.target.rotation.y)
+		vec3.applyAxisAngle(axis, this.target.rotation.y);
 
 		// Center on the target's position
 		vec3.add(this.target.position);
-		return vec3;	
+		return vec3;
 	}
 
-	calculateIdealOffset(mouseWheelPercent) { // This should be behind the "person's" back or head, possibly offset
+	/** This should be behind the "person's" back or head, possibly offset */
+	calculateIdealOffset(mouseWheelPercent) {
 		const offset = new Vector3(
 			-50, // off to the side a little bit
 			150 + (120 * mouseWheelPercent), // above
@@ -33,9 +35,9 @@ class ThirdPersonCamera {
 		return this.calculateTargetVec3(offset);
 	}
 
-	calculateIdealLookAt() { // Should be ahead of the "person" - where they would naturally be looking
-		const lookAt = new Vector3(0, 0, 200);
-		return this.calculateTargetVec3(lookAt);
+	/** Should be ahead of the "person" - where they would naturally be looking */
+	calculateIdealLookAt() {
+		return this.calculateTargetVec3(this.lookAtOffset);
 	}
 
 	update(t, mouseWheelPercent) {
@@ -45,7 +47,7 @@ class ThirdPersonCamera {
 
 		// const q = 0.05;
 		// This is from simon dev but needs some tweaking
-		const q = 1.0 - Math.pow(0.24, t);
+		const q = 1.0 - (0.24 ** t);
 		// console.log(q, t);
 
 		this.currentPosition.lerp(idealOffset, q);
